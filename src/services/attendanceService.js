@@ -1,5 +1,6 @@
 import { supabase } from '../config/supabaseClient'
 
+// 1. Ambil Semua Data Absensi
 export const getAttendances = async () => {
   const { data, error } = await supabase
     .from('attendances')
@@ -13,6 +14,7 @@ export const getAttendances = async () => {
   return data
 }
 
+// 2. Tambah Absensi Baru
 export const addAttendance = async (formData) => {
   const { data, error } = await supabase
     .from('attendances')
@@ -32,4 +34,32 @@ export const addAttendance = async (formData) => {
     throw error
   }
   return data
+}
+
+// 3. Update Record Absensi
+export const updateAttendance = async (id, updateData) => {
+  const { data, error } = await supabase
+    .from('attendances')
+    .update(updateData)
+    .eq('id', id)
+    .select()
+
+  if (error) {
+    console.error('Error updating attendance:', error)
+    throw error
+  }
+  return data
+}
+
+// 4. Hapus Record Absensi
+export const deleteAttendance = async (id) => {
+  const { error } = await supabase
+    .from('attendances')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    console.error('Error deleting attendance:', error)
+    throw error
+  }
 }

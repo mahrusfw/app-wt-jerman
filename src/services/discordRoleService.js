@@ -12,6 +12,14 @@ export async function fetchUserDiscordRole(user) {
 
   if (!discordUserId) return { role: 'OUTSIDER', title: 'OUTSIDER' }
 
+  // 1. BYPASS UNTUK LOCALHOST (Jalanin di npm run dev tanpa Access Denied)
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  if (isLocalhost) {
+    // Bebas ubah ke 'ADMIN', 'MEMBER', atau 'WORKER' sesuai kebutuhan testing lokal lu
+    return { role: 'ADMIN', title: 'ADMIN' }
+  }
+
+  // 2. UNTUK PRODUCTION (VERCEL) -> Tetap hit API Discord
   const response = await fetch('/api/sync-roles', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
